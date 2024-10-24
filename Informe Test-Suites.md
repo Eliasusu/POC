@@ -568,7 +568,7 @@ Para esto, Mocha suele necesitar ser complementado con herramientas que simulen 
 | Framework           | Tiempo de Ejecución (ms) | Cobertura de Código (%) |
 | ------------------- | ------------------------ | ----------------------- |
 | **TestCafe**        | ms                       | %                       |
-| **Testing Library** | ms                       | %                       |
+| **Testing Library** | 3.019 s                  | 100%                    |
 
 # Conclusiones
 
