@@ -16,6 +16,11 @@
 - Manavella Enzo 51509
 - Sandivaras Gonzalo 50819
 - Morresi Facundo 50359
+  
+**Jest:**
+- Álvarez Sol Micaela 46924
+- Leonardelli Marianela Anahí 51337
+- Molinas María del Rosario 47786
 
 ## Glosario
 
