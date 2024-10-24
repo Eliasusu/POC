@@ -6,12 +6,10 @@ Testing Library es un conjunto de herramientas para probar interfaces de usuario
 
 La filosofía de Testing Library es centrarse en la accesibilidad y en probar el comportamiento real de la aplicación desde la perspectiva del usuario final.
 
-## Tipos De Testing
-Testing Library es una herramienta diseñada principalmente para realizar pruebas de integración y pruebas funcionales (o de usuario) en aplicaciones web, aunque también puede usarse para algunas pruebas unitarias. A continuación, se presentan los principales tipos de pruebas que se pueden realizar con Testing Library:
+## Alcance / ¿Admiten E2E?
 
-- __Pruebas funcionales o de usuario:__ Se enfocan en cómo el usuario interactúa con la aplicación. Verifican que los elementos de la interfaz de usuario (UI) respondan correctamente cuando el usuario hace clic, escribe en un formulario o realiza alguna acción. Este es el enfoque principal de Testing Library, simulando cómo un usuario real usaría la aplicación.
-- __Pruebas de integración:__ Aseguran que diferentes partes del sistema funcionen bien juntas. Testing Library permite verificar que los componentes se comuniquen correctamente entre sí, probando cómo se comporta la UI al integrarse con otras partes del sistema.
-- __Pruebas unitarias:__ Aunque no es el enfoque principal, Testing Library también puede usarse para probar unidades individuales (como componentes o funciones) de manera aislada. Sin embargo, para este tipo de pruebas es más común usar herramientas especializadas como Jest.
+Testing Library en sí no está diseñado específicamente para pruebas end-to-end (E2E). Es principalmente una librería para pruebas unitarias y de integración enfocada en probar componentes de UI de forma aislada. Sin embargo, hay una herramienta relacionada llamada Cypress Testing Library que extiende Cypress (un framework de pruebas E2E) con los mismos principios y selectores de Testing Library.
+
 
 ## Quienes lo utilizan
 
