@@ -17,6 +17,11 @@
 - Sandivaras Gonzalo 50819
 - Morresi Facundo 50359
 
+**Jest:**
+- Alvarez Sol Micaela 46924
+- Leonardelli Marianela Anahí 51337
+- Molinas María del Rosario 47786
+
 ## Glosario
 
 **Testing**: El Testing de Software es toda una disciplina en la ingeniería de software permite tener procesos, métodos de trabajo y herramientas para identificar defectos en el software alcanzando un proceso de estabilidad del mismo
