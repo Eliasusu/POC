@@ -162,9 +162,9 @@ Puede parecer que crear tests consuma tiempo y recursos, pero es todo lo contrar
 
 Un software bien probado y estructurado es más fácil de mantener y actualizar. Tener tests permite garantizar que si hay actualizaciones de librerías que se estén utilizando o cambios en los Apis y servicios que están siendo consumidos no introduzcan nuevos errores en el sistema. Esto ayuda a mantener la estabilidad del software a lo largo del tiempo.
 
-### Satisfacción
+### Satisfacción para el usuario
 
-El resultado mejora la satisfacción del usuario final si se tiene una aplicación web que funciona correctamente, satisface las necesidades del usuario y no tiene errores imprevistos genera una experiencia más satisfactoria en el cliente. Esto aumenta la retención de los usuarios en la plataforma, genera opiniones positivas y recomendaciones.
+El resultado mejora la satisfacción del usuario final si se tiene una aplicación web quefunciona correctamente, satisface las necesidades del usuario y no tiene errores imprevistos genera una experiencia más satisfactoria en el cliente. Esto aumenta la retención de los usuarios en la plataforma, genera opiniones positivas y recomendaciones.
 
 ### Confianza en el equipo de desarrollo
 
@@ -542,7 +542,8 @@ TestCafe es un framework de pruebas de extremo a extremo (E2E) que permite a los
 
 ## Testing-Library
 
-Testing Library es una herramienta de pruebas centrada en el usuario que se utiliza principalmente para pruebas de componentes de frontend. Aunque no está diseñada específicamente para pruebas de extremo a extremo (E2E), se puede utilizar para probar la funcionalidad de la interfaz de usuario en un entorno simulado.
+Testing Library en sí no está diseñado específicamente para pruebas end-to-end (E2E). Es principalmente una librería para pruebas unitarias y de integración enfocada en probar componentes de UI de forma aislada. Sin embargo, hay una herramienta relacionada llamada Cypress Testing Library que extiende Cypress (un framework de pruebas E2E) con los mismos principios y selectores de Testing Library.
+
 
 ## Jest
 
