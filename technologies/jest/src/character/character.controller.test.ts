@@ -1,298 +1,198 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
-import { sanitizeCharacterInput, findAll, findOne, add, update, remove } from './character.controller';
 import { CharacterRepository } from './character.repository';
 import { Character } from './character.entity';
+import { sanitizeCharacterInput, findAll, findOne, add, update, remove } from './character.controller';
+import * as CharacterController from './character.controller';
 
-// Mockear el repositorio para evitar que use una implementación real
-jest.mock('./character.repository');
 
-// Crear mocks para `req`, `res` y `next`
-const mockRequest = (body = {}, params = {}) => {
-  return {
-    body,
-    params
-  } as Partial<Request>;
+//jest.spyOn('./character.controller', {spy: true}); // Mock para el controlador
+jest.spyOn(CharacterController, 'findAll');
+// Mock para Request y Response de Express
+const mockRequest = () => {
+  const req: Partial<Request> = {
+    body: {},
+    params: {}
+  };
+  return req as Request;
 };
 
 const mockResponse = () => {
-  const res: Partial<Response> = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  res.send = jest.fn().mockReturnValue(res);
-  return res;
+  const res: Partial<Response> = {
+    json: jest.fn() as jest.MockedFunction<Response['json']>,
+    status: jest.fn().mockReturnThis() as jest.MockedFunction<Response['json']>,
+    send: jest.fn().mockReturnThis() as jest.MockedFunction<Response['json']>,
+  };
+  return res as Response;
 };
-
-const mockNext: NextFunction = jest.fn();
-
-describe('Character Controller', () => {
-  let repository: jest.Mocked<CharacterRepository>; // Usamos el repositorio mockeado
+describe('sanitizeCharacterInput middleware', () => {
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let next: NextFunction;
 
   beforeEach(() => {
-    repository = new CharacterRepository() as jest.Mocked<CharacterRepository>; // Instanciamos el repositorio como un mock
-    jest.clearAllMocks(); // Limpia los mocks entre cada prueba
-  });
-
-  describe('findAll', () => {
-    it('should return all characters', () => {
-      const req = mockRequest();
-      const res = mockResponse();
-      const characters = [
-        new Character('John', 'Mage', 10, 100, 50, 20, ['staff'], '1'),
-        new Character('Jane', 'Warrior', 12, 120, 60, 25, ['sword'], '2')
-      ];
-
-      repository.findAll.mockReturnValue(characters); // Mockear la función `findAll` del repositorio
-
-      findAll(req as Request, res as Response);
-
-      expect(repository.findAll).toHaveBeenCalled(); // Verifica que `findAll` fue llamado
-      expect(res.json).toHaveBeenCalledWith({ data: characters }); // Verifica la respuesta con los personajes
-    });
-  });
-
-  describe('findOne', () => {
-    it('should return a character by id', () => {
-      const req = mockRequest({}, { id: '1' });
-      const res = mockResponse();
-      const character = new Character('John', 'Mage', 10, 100, 50, 20, ['staff'], '1');
-
-      repository.findOne.mockReturnValue(character); // Mockear `findOne` del repositorio
-
-      findOne(req as Request, res as Response);
-
-      expect(repository.findOne).toHaveBeenCalledWith({ id: '1' }); // Verifica que se buscó el personaje con el ID correcto
-      expect(res.json).toHaveBeenCalledWith({ data: character }); // Verifica la respuesta
-    });
-
-    it('should return 404 if character is not found', () => {
-      const req = mockRequest({}, { id: '1' });
-      const res = mockResponse();
-
-      repository.findOne.mockReturnValue(undefined); // Mockear `findOne` para que no encuentre el personaje
-
-      findOne(req as Request, res as Response);
-
-      expect(repository.findOne).toHaveBeenCalledWith({ id: '1' });
-      expect(res.status).toHaveBeenCalledWith(404); // Verifica que se haya devuelto un error 404
-      expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' }); // Verifica el mensaje de error
-    });
-  });
-
-  describe('add', () => {
-    it('should add a new character', () => {
-      const req = mockRequest({
-        sanitizedInput: {
-          name: 'John',
-          characterClass: 'Mage',
-          level: 10,
-          hp: 100,
-          mana: 50,
-          attack: 20,
-          items: ['staff'],
-          id: '1'
-        }
-      });
-      const res = mockResponse();
-      const character = new Character(
-        'John',
-        'Mage',
-        10,
-        100,
-        50,
-        20,
-        ['staff'],
-        '1'
-      );
-
-      repository.add.mockReturnValue(character); // Mockear `add` para simular la adición del personaje
-
-      add(req as Request, res as Response);
-
-      expect(repository.add).toHaveBeenCalledWith(character); // Verifica que el personaje fue añadido correctamente
-      expect(res.status).toHaveBeenCalledWith(201); // Verifica que se devolvió un 201
-      expect(res.send).toHaveBeenCalledWith({
-        message: 'Character created',
-        data: character
-      }); // Verifica la respuesta correcta
-    });
-  });
-
-  describe('update', () => {
-    it('should update an existing character', () => {
-      const req = mockRequest(
-        {
-          sanitizedInput: {
-            name: 'John Updated',
-            level: 15,
-            hp: 120,
-            mana: 60,
-            attack: 25
-          }
-        },
-        { id: '1' }
-      );
-      const res = mockResponse();
-      const updatedCharacter = new Character(
-        'John Updated',
-        'Mage',
-        15,
-        120,
-        60,
-        25,
-        ['staff'],
-        '1'
-      );
-
-      repository.update.mockReturnValue(updatedCharacter); // Mockear `update`
-
-      update(req as Request, res as Response);
-
-      expect(repository.update).toHaveBeenCalledWith({
-        id: '1',
-        name: 'John Updated',
-        level: 15,
-        hp: 120,
-        mana: 60,
-        attack: 25
-      }); // Verifica que se llamó correctamente con el personaje actualizado
-      expect(res.status).toHaveBeenCalledWith(200); // Verifica que el estado sea 200
-      expect(res.send).toHaveBeenCalledWith({
-        message: 'Character updated successfully',
-        data: updatedCharacter
-      }); // Verifica la respuesta correcta
-    });
-
-    it('should return 404 if character is not found during update', () => {
-      const req = mockRequest(
-        {
-          sanitizedInput: {
-            name: 'Non-existent character',
-            level: 15
-          }
-        },
-        { id: '9999' }
-      );
-      const res = mockResponse();
-
-      repository.update.mockReturnValue(undefined); // Mockear `update` para que no encuentre el personaje
-
-      update(req as Request, res as Response);
-
-      expect(repository.update).toHaveBeenCalledWith({
-        id: '9999',
-        name: 'Non-existent character',
-        level: 15
-      });
-      expect(res.status).toHaveBeenCalledWith(404); // Verifica que se devolvió un 404
-      expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' }); // Verifica el mensaje de error
-    });
-  });
-
-  describe('remove', () => {
-    it('should delete a character by id', () => {
-      const req = mockRequest({}, { id: '1' });
-      const res = mockResponse();
-      const character = new Character('John', 'Mage', 10, 100, 50, 20, ['staff'], '1');
-
-      repository.delete.mockReturnValue(character); // Mockear `delete`
-
-      remove(req as Request, res as Response);
-
-      expect(repository.delete).toHaveBeenCalledWith({ id: '1' }); // Verifica que se llamó correctamente con el ID
-      expect(res.status).toHaveBeenCalledWith(200); // Verifica que se devolvió un 200
-      expect(res.send).toHaveBeenCalledWith({ message: 'Character deleted successfully' }); // Verifica la respuesta
-    });
-
-    it('should return 404 if character is not found during delete', () => {
-      const req = mockRequest({}, { id: '9999' });
-      const res = mockResponse();
-
-      repository.delete.mockReturnValue(undefined); // Mockear `delete` para que no encuentre el personaje
-
-      remove(req as Request, res as Response);
-
-      expect(repository.delete).toHaveBeenCalledWith({ id: '9999' });
-      expect(res.status).toHaveBeenCalledWith(404); // Verifica que se devolvió un 404
-      expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' }); // Verifica el mensaje de error
-    });
-  });
-});
-
-
-/* const { sanitizeCharacterInput, findAll, findOne, add, update, remove } = require('./character.controller');
-const { CharacterRepository } = require('./character.repository');
-const { Character } = require('./character.entity');
-
-// Mockear el repositorio
-jest.mock('./character.repository');
-
-// Crear mocks de Request, Response y NextFunction
-const mockRequest = () => ({
-  body: {},
-  params: {},
-});
-/*
-const mockResponse = () => {
-  const res = {};
-  res.json = jest.fn().mockReturnValue(res);
-  res.status = jest.fn().mockReturnValue(res);
-  res.send = jest.fn().mockReturnValue(res);
-  return res;
-}; 
-const mockResponse = () => {
-    const res: Partial<Response> = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis(),
+    // Mockea `req`, `res`, y `next`
+    req = {
+      body: {
+        name: 'Luke Skywalker',
+        characterClass: 'Jedi',
+        level: 10,
+        hp: 100,
+        mana: 50,
+        attack: 20,
+        items: ['Lightsaber'],
+        id: '1234',
+      },
     };
-    return res as Response;
 
-const mockNext = jest.fn();
+    res = {};
+    next = jest.fn(); // Mockea `next` para verificar si se llama correctamente
+  });
 
-describe('CharacterController', () => {
-  let req;
-  let res;
-  let repository;
+  it('should sanitize the input correctly', () => {
+    // Llama a la función middleware
+    sanitizeCharacterInput(req as Request, res as Response, next);
+
+    // Verifica que `req.body.sanitizedInput` tenga los datos correctos
+    expect(req.body.sanitizedInput).toEqual({
+      name: 'Luke Skywalker',
+      characterClass: 'Jedi',
+      level: 10,
+      hp: 100,
+      mana: 50,
+      attack: 20,
+      items: ['Lightsaber'],
+      id: '1234',
+    });
+
+    // Verifica que `next` fue llamado
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('should remove undefined properties', () => {
+    // Simula algunos valores undefined
+    req.body = {
+      name: 'Darth Vader',
+      characterClass: undefined, // Este debería eliminarse
+      level: 15,
+      hp: 150,
+      mana: 70,
+      attack: 30,
+      items: undefined, // Este debería eliminarse
+      id: '5678',
+    };
+
+    // Llama a la función middleware
+    sanitizeCharacterInput(req as Request, res as Response, next);
+
+    // Verifica que las propiedades undefined hayan sido eliminadas
+    expect(req.body.sanitizedInput).toEqual({
+      name: 'Darth Vader',
+      level: 15,
+      hp: 150,
+      mana: 70,
+      attack: 30,
+      id: '5678',
+    });
+
+    // Verifica que `next` fue llamado
+    expect(next).toHaveBeenCalled();
+  });
+});
+
+describe('CharacterController CRUD', () => {
+  let repository: CharacterRepository;
+  let req: Request;
+  let res: Response;
+  let next: NextFunction;
 
   beforeEach(() => {
+    repository = new CharacterRepository();
     req = mockRequest();
     res = mockResponse();
-    repository = new CharacterRepository(); // Acceder al repositorio mockeado
+    next = jest.fn();
+    // Tipar el repositorio como un objeto mockeado de CharacterRepository
+    repository = {
+      findAll: jest.fn() as jest.Mock<() => Character[] | undefined>,
+      findOne: jest.fn() as jest.Mock<(item: { id: string }) => Character | undefined>,
+      add: jest.fn() as jest.Mock<(item: Character) => Character | undefined>,
+      update: jest.fn() as jest.Mock<(item: Character) => Character | undefined>,
+      delete: jest.fn() as jest.Mock<(item: { id: string }) => Character | undefined>,
+    };
+    // Mock de las funciones del repositorio
+    //repository.findAll = jest.fn();
+   // repository.findOne = jest.fn();
+   // repository.add = jest.fn();
+   // repository.update = jest.fn();
+   // repository.delete = jest.fn();
   });
 
-  it('should return all characters in findAll', () => {
-    // Simular una lista de personajes en el repositorio
-    repository.findAll.mockReturnValue([
-      { name: 'Darth Vader', characterClass: 'Sith' },
-      { name: 'Yoda', characterClass: 'Jedi' },
-    ]);
+  it('should return all characters', () => {
+    repository.findAll();
 
     findAll(req, res);
 
     expect(res.json).toHaveBeenCalledWith({
-      data: [
-        { name: 'Darth Vader', characterClass: 'Sith' },
-        { name: 'Yoda', characterClass: 'Jedi' },
-      ],
+      "data": [
+        {
+          "name": "Darth Vader",
+          "characterClass": "Sith",
+          "level": 11,
+          "hp": 101,
+          "mana": 22,
+          "attack": 11,
+          "items": [
+            "Lightsaber",
+            "Death Star"
+          ],
+          "id": "1234"
+        },
+        {
+          "name": "Yoda",
+          "characterClass": "Jedi",
+          "level": 12,
+          "hp": 120,
+          "mana": 25,
+          "attack": 12,
+          "items": [
+            "Lightsaber",
+            "Wisdom"
+          ],
+          "id": "9101"
+        }
+      ]
     });
+
+    
+
   });
 
-  it('should return a character in findOne', () => {
-    // Simular un personaje en el repositorio
-    const mockCharacter = { name: 'Luke Skywalker', characterClass: 'Jedi', id: '1' };
-    req.params.id = '1';
-    repository.findOne.mockReturnValue(mockCharacter);
+  it('should return a character by id', () => {
+    req.params.id = '1234';
+    repository.findOne({ id: '1234' });
 
     findOne(req, res);
 
     expect(res.json).toHaveBeenCalledWith({
-      data: mockCharacter,
+          "data": {
+            "name": "Darth Vader",
+            "characterClass": "Sith",
+            "level": 11,
+            "hp": 101,
+            "mana": 22,
+            "attack": 11,
+            "items": [
+              "Lightsaber",
+              "Death Star"
+            ],
+            "id": "1234"
+          }
     });
   });
 
-  it('should return 404 if character not found in findOne', () => {
-    req.params.id = '9999';
-    repository.findOne.mockReturnValue(null);
+  it('should return 404 if character not found', () => {
+    req.params.id = '0000';
+    repository.findOne({ id: '0000'});
 
     findOne(req, res);
 
@@ -300,58 +200,77 @@ describe('CharacterController', () => {
     expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' });
   });
 
-  it('should add a new character in add', () => {
-    const mockCharacterInput = {
+  it('should add a new character', () => {
+    req.body.sanitizedInput = {
       name: 'Leia Organa',
       characterClass: 'Rebel Leader',
-      level: 10,
-      hp: 100,
-      mana: 50,
-      attack: 30,
-      items: ['Blaster'],
-      id: '5678',
-    };
-    req.body.sanitizedInput = mockCharacterInput;
-
-    add(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.send).toHaveBeenCalledWith({
-      message: 'Character created',
-      data: { ...mockCharacterInput },
-    });
-  });
-
-  it('should update an existing character in update', () => {
-    const mockCharacter = {
-      name: 'Leia Organa',
-      characterClass: 'Rebel Leader',
-      level: 20,
+      level: 15,
       hp: 120,
       mana: 80,
       attack: 35,
-      items: ['Blaster'],
-      id: '5678',
+      items: ['Blaster', 'Diplomacy'],
+      id: '5678'
+    };
+
+   
+    add(req, res);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledWith({
+            message: "Character created",
+            data: {
+              name: "Leia Organa",
+              characterClass: "Rebel Leader",
+              level: 15,
+              hp: 120,
+              mana: 80,
+              attack: 35,
+              items: [
+                "Blaster",
+                "Diplomacy"
+              ],
+              id: "5678"
+            }
+          });
+  });
+
+
+  it('should update an existing character', () => {
+    req.body.sanitizedInput = {
+      name: 'Leia Organa',
+      level: 20
     };
     req.params.id = '5678';
-    req.body.sanitizedInput = mockCharacter;
 
-    repository.update.mockReturnValue(mockCharacter);
+    repository.update(
+      new Character('Leia Organa', 'Rebel Leader', 20, 120, 80, 35, ['Blaster', 'Diplomacy'], '5678')
+    );
 
     update(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.send).toHaveBeenCalledWith({
       message: 'Character updated successfully',
-      data: mockCharacter,
+      data: {
+        name: 'Leia Organa',
+        characterClass: 'Rebel Leader',
+        level: 20,
+        hp: 120,
+        mana: 80,
+        attack: 35,
+        items: ['Blaster', 'Diplomacy'],
+        id: '5678'
+      }
     });
   });
 
   it('should return 404 when updating a non-existent character', () => {
+    req.body.sanitizedInput = {
+      name: 'Han Solo',
+      level: 20
+    };
     req.params.id = '9999';
-    req.body.sanitizedInput = { name: 'Han Solo', level: 20 };
 
-    repository.update.mockReturnValue(null);
+    repository.update(new Character('Han Solo', 'Smuggler', 20, 100, 50, 30, ['Blaster'], '9999'));
 
     update(req, res);
 
@@ -359,10 +278,12 @@ describe('CharacterController', () => {
     expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' });
   });
 
-  it('should delete a character by id in remove', () => {
+  it('should delete a character by id', () => {
     req.params.id = '5678';
 
-    repository.delete.mockReturnValue({ id: '5678' });
+    repository.delete(
+      new Character('Leia Organa', 'Rebel Leader', 20, 120, 80, 35, ['Blaster', 'Diplomacy'], '5678')
+    );
 
     remove(req, res);
 
@@ -373,12 +294,12 @@ describe('CharacterController', () => {
   it('should return 404 when deleting a non-existent character', () => {
     req.params.id = '9999';
 
-    repository.delete.mockReturnValue(null);
+    repository.delete({ id: '9999' });
 
     remove(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith({ message: 'Character not found' });
   });
-}); 
-*/ 
+});
+

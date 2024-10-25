@@ -1,4 +1,3 @@
-
 import {generateId} from '../shared/generateId'
 
 export class Character {

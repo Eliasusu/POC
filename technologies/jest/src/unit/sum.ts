@@ -1,5 +1,5 @@
-function sumar(a , b) {
+function sumar(a:number , b:number) {
     return a + b;
   }
   
-  module.exports = sumar;
+  export { sumar }

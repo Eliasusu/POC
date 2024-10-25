@@ -20,6 +20,7 @@ const config: Config = {
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
+  
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
@@ -34,6 +35,8 @@ const config: Config = {
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
+
+  coverageReporters: ['cobertura','lcov','text'],
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -195,5 +198,8 @@ const config: Config = {
   // Whether to use watchman for file crawling
   // watchman: true,
 };
-
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+};
 export default config;

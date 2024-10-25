@@ -1,0 +1,48 @@
+### obtener todos los characters
+GET http://localhost:3000/api/characters
+
+
+### obtener un character
+GET http://localhost:3000/api/characters/1234
+
+### crear un nuevo character
+POST http://localhost:3000/api/characters
+Content-Type: application/json
+
+{
+  "name": "Leia Organa",
+  "characterClass": "Rebel Leader",
+  "items": ["Blaster", "Diplomacy"],
+  "attack": 35,
+  "mana": 80,
+  "hp": 120,
+  "level": 15
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Anakin Skywalker",
+  "characterClass": "Fallen Jedi",
+  "items": ["Lightsaber", "Death Star"],
+  "attack": 110,
+  "mana": 500,
+  "hp": 100,
+  "level": 11    
+}
+
+### modificar un character (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/characters/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Anakin Skywalker",
+  "characterClass": "Fallen Jedi",
+  "items": ["Lightsaber", "X-Wing"],
+  "level": 12    
+}
+
+### borrar un character
+DELETE http://localhost:3000/api/characters/d4603036-fbb6-4041-9197-be225e6845f9

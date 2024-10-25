@@ -1,5 +1,7 @@
-import { Repository } from '../shared/repository.js'
-import { Character } from './character.entity.js'
+import { Repository }  from   '../shared/repository';
+import { Character }  from './character.entity';
+
+
 
 const characters = [
   new Character(
