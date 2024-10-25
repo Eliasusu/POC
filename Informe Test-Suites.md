@@ -298,7 +298,7 @@ Jest es desarrollado y mantenido principalmente por Meta (anteriormente Facebook
 
 ## Mocha
 
-Los principales sponsors de Mocha son las empresas Localize y Route4Me. Adicionalmente está respaldado por colaboradores financieros. Estos son los principales sponsors de Mocha:
+Los principales sponsors de Mocha, según la documentación, son las empresas Localize y Route4Me. Adicionalmente está respaldado por colaboradores financieros. Estos son los principales sponsors de Mocha:
 
  <p align="center">
   <a href="https://localizejs.com">
@@ -310,6 +310,8 @@ Los principales sponsors de Mocha son las empresas Localize y Route4Me. Adiciona
     <img src='https://mochajs.org/images/supporters/3k0exgzn-m8yj64gk-jr865wao-9r7b4dlv.png?sprite=sponsors'/>
   </a>
 </p>
+
+En https://opencollective.com/mochajs/contribute/sponsors-966 podemos ver otros sponsors como Clay y Icons8.
 
 # Curva de aprendizaje
 
