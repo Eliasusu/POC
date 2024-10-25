@@ -628,7 +628,7 @@ Ahora bien, es importante tener en cuenta que Mochajs no se encuentra respaldado
 
 Es por estos motivos que elegimos utilizar Mocha js exclusivamente en casos en los que la flexibilidad del testing, o la performance, sean puntos fundamentales a tener en cuenta a la hora de realizar los tests.
 
-## Casos de uso ideal
+# Casos de uso ideal
 
 | Tecnología      | Fortalezas                                                                        | Debilidades                                                        | Caso de Uso Ideal                                                          |
 | --------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
