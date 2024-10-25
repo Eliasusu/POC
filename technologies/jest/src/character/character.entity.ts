@@ -1,4 +1,5 @@
-import {generateId} from '../shared/generateId.js'
+
+import {generateId} from '../shared/generateId'
 
 export class Character {
   constructor(

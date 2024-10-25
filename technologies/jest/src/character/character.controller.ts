@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction} from 'express'
 import { CharacterRepository } from './character.repository.js'
 import { Character } from './character.entity.js'
 
 const repository = new CharacterRepository()
 
-function sanitizeCharacterInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeCharacterInput(req:Request, res: Response, next:NextFunction) {
   req.body.sanitizedInput = {
     name: req.body.name,
     characterClass: req.body.characterClass,
@@ -25,11 +25,11 @@ function sanitizeCharacterInput(req: Request, res: Response, next: NextFunction)
   next()
 }
 
-function findAll(req: Request, res: Response) {
+function findAll(req:Request, res:Response) {
   res.json({ data: repository.findAll() })
 }
 
-function findOne(req: Request, res: Response) {
+function findOne(req:Request, res:Response) {
   const id = req.params.id
   const character = repository.findOne({ id })
   if (!character) {
@@ -38,7 +38,7 @@ function findOne(req: Request, res: Response) {
   res.json({ data: character })
 }
 
-function add(req: Request, res: Response) {
+function add(req:Request, res:Response) {
   const input = req.body.sanitizedInput
 
   const characterInput = new Character(
@@ -56,7 +56,7 @@ function add(req: Request, res: Response) {
   return res.status(201).send({ message: 'Character created', data: { ...characterInput } })
 }
 
-function update(req: Request, res: Response) {
+function update(req:Request, res:Response) {
   req.body.sanitizedInput.id = req.params.id
   const character = repository.update(req.body.sanitizedInput)
 
@@ -67,7 +67,7 @@ function update(req: Request, res: Response) {
   return res.status(200).send({ message: 'Character updated successfully', data: character })
 }
 
-function remove(req: Request, res: Response) {
+function remove(req:Request, res:Response) {
   const id = req.params.id
   const character = repository.delete({ id })
 
