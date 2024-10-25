@@ -21,6 +21,10 @@
 - Álvarez Sol Micaela 46924
 - Leonardelli Marianela Anahí 51337
 - Molinas María del Rosario 47786
+  
+**TestCafe:**
+-Julia Melgarejo 51441
+-Tomas Peresin 46338
 
 ## Glosario
 
