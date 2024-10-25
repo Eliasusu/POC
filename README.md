@@ -9,7 +9,6 @@ Este repositorio está dedicado a la exploración, comparación y evaluación de
 - [Cómo Usar](#cómo-usar)
 - [Instalación](#instalación)
 - [Casos de Prueba](#casos-de-prueba)
-- [Licencia](#licencia)
 
 ## Tecnologías Investigadas
 
