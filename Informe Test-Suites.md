@@ -38,6 +38,8 @@ A diferencia de los mocks, los spies no reemplazan el objeto real completamente,
 
 **Assert**: es una herramienta utilizada para verificar que una condición específica sea verdadera durante la ejecución de un test.
 
+**Describe**: es una función utilizada para agrupar varios casos de prueba relacionados. Permite organizar múltiples casos de prueba con la función it, permitiendo que las pruebas sean más legibles y estén estructuradas de manera lógica. 
+
 ## Introducción
 
 En el presente trabajo realizamos una comparación entre diversas tecnologías de testing que son ampliamente utilizadas en el desarrollo de software actual. Para ello, llevamos a cabo un análisis detallado de las siguientes herramientas: Vitest, TestCafe, Testing Library, Jest y Mocha. Cada una de ellas ofrece diferentes enfoques y features, que las hacen más o menos adecuadas dependiendo del tipo de pruebas a realizar, ya sean unitarias, de integración o pruebas end-to-end.
