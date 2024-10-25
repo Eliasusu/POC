@@ -8,7 +8,8 @@
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/app.js\"",
     "test:character": "npm run build && c8 mocha './dist/test/character.controller.test.js'",
     "test:genericos": "npm run build && mocha './dist/test/genericos.test.js'",
-    "test:paralelo": "npm run build && mocha --p './dist/test/genericos.test.js'",
+    "test:paralelo": "npm run build && mocha --parallel './dist/test/genericos.test.js' './dist/test/character.controller.test.js'",
+    "test": "npm run build && mocha  './dist/test/genericos.test.js' './dist/test/character.controller.test.js'",
     "build": "npx tsc",
     "start": "npx tsx src/app.ts"
   },
